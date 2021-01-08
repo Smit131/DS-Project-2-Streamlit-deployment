@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
+import pickle
 
 from collections import Counter
 from textblob import TextBlob
