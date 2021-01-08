@@ -10,7 +10,10 @@ from textblob import TextBlob
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfVectorizer
 import re
+model = pickle.load(open('model.pkl','rb'))
 
+with open('matrix.pkl', 'rb') as f:
+    emails_bow1 = pickle.load(f)
 
 st.title('NLP Project deployment')
 
@@ -34,21 +37,7 @@ df.reset_index(inplace= True)
 
 from sklearn.feature_extraction.text import CountVectorizer,TfidfTransformer
 
-def split_into_words(i):
-    return [word for word in i.split(" ")]
 
-# Preparing email texts into word count matrix format 
-emails_bow = CountVectorizer(analyzer=split_into_words).fit(df.CleanContent)
-
-# For all messages
-all_emails_matrix = emails_bow.transform(df.CleanContent)
-
-X = all_emails_matrix
-Y = df.Class
-
-from sklearn.linear_model import LogisticRegression
-classifier = LogisticRegression(max_iter=500,random_state=0)
-classifier.fit(X,Y)
 
 # Taking input
 
@@ -56,9 +45,9 @@ f = [msg]
 fpd = pd.DataFrame(f,columns = ['CleanContent'])
 
 # For input message
-f_matrix = emails_bow.transform(fpd.CleanContent)
+f_matrix = emails_bow1.transform(fpd.CleanContent)
 
-f_pred = classifier.predict(f_matrix)
+f_pred = model.predict(f_matrix)
 
 answer = f_pred[0]
 
